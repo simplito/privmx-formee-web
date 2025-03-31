@@ -1,0 +1,54 @@
+stages: # List of stages for jobs, and their order of execution
+    - build_test
+    - deploy_test
+    - deploy_prod
+
+variables:
+    PORT: 8164 # port eksponowany z kontenejra
+    APKA: formee # DNS oraz folder w /srv oraz nazwa pliku z vhostem
+
+zbuduj_na_dock1:
+    tags:
+        - appdeployer
+    when: always
+    stage: build_test
+    only:
+        - dev
+        - /^\d+-[a-zA-Z]+-\d+(-[a-zA-Z]+)*$/ # tylko dla brchów epikowych np. 23-epic-3-nowe-zmiany
+        - /[a-zA-Z0-9\-]*epic[a-zA-Z0-9\-]*/
+    script:
+        - docker build --tag formee:simplito --build-arg MONGODB_URI="mongodb://mongo:27017/replicaSet=rs0" --build-arg NEXT_PUBLIC_BACKEND_URL="https://formee.test.simplito.com" --build-arg CLOUD_DEV_TOKEN="${CI_CLOUD_DEV_TOKEN}" --build-arg CLOUD_URL="${CI_CLOUD_URL}" --build-arg CONTEXT_ID="${CI_CONTEXT_ID}" --build-arg JWT_SALT="${CI_JWT_SALT}" --build-arg OWNER_TOKEN="${CI_OWNER_TOKEN}" --build-arg PLATFORM_URL="${CI_PLATFORM_URL}" --build-arg SOLUTION_ID="${CI_SOLUTION_ID}" --build-arg SOLUTION_ID="${CI_SOLUTION_ID}" --build-arg REPLICA_SET="${CI_REPLICA_SET}" .
+
+wrzuc_na_dock1: # This job runs in the build stage, which runs first.
+    tags:
+        - appdeployer
+    when: manual
+    stage: deploy_test
+    only:
+        - dev
+    script:
+        - sudo -u deployer /home/deployer/dodaj_apke.sh $APKA $PORT $CI_PROJECT_DIR
+
+usun_z_dock1:
+    tags:
+        - appdeployer
+    when: manual
+    stage: deploy_test
+    only:
+        - main
+    script:
+        - sudo -u deployer /home/deployer/usun_apke.sh $APKA
+
+wrzuc_na_nadzorca3:
+    tags:
+        - formee-prod
+    when: manual
+    stage: deploy_prod
+    only:
+        - main
+    script:
+        - hostname -f
+        - id
+        - set
+        - ls -al $CI_PROJECT_DIR
+        - exit 127
