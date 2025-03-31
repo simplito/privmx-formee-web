@@ -1,6 +1,6 @@
 # Formee
 
-Formee is a application that allows you to handle forms and provides you with full end-to-end encryption using <b>[PrivMX Bridge](https://privmx.cloud)</b>.
+Formee is an application written in Next.js that allows you to handle forms and provides you with full end-to-end encryption using <b>[PrivMX Bridge](https://privmx.dev)</b>.
 
 ![formee](./formee.png)
 
@@ -16,7 +16,7 @@ provider cannot access user data.
 Formee consist of two parts: **Web Application** and **Server Backend** (both written in Next.js).
 **Server Backend** manages **user accounts** and utilizes MongoDB for persistent data storage.
 
-All the sent form entries and files are managed by <b>[PrivMX Bridge](https://privmx.cloud)</b>, to ensure they are properly
+All the sent form entries and files are managed by <b>[PrivMX Bridge](https://privmx.dev)</b>, to ensure they are properly
 encrypted and are not stored in your server environment.
 
 ## Requirements
@@ -25,17 +25,17 @@ encrypted and are not stored in your server environment.
 -   MongoDB instance or Docker, which allows to run our docker compose file to run the database.
 -   PrivMX Bridge Instance and Docker for running it.
 
-## How to start?
+## How to Start?
 
-- To begin, clone this repository. It includes the Formee sources along with various helpful files.
-- Copy or rename `./.env.example` to `./.env.local`. `.env.example` contains essential variables and / or placeholders. All environmental variables for local development should be put there, including MongoDB connection string, PrivMX Bridge URL, API Keys, PrivMX Solution & Context IDs. You can find more information about these variables in the following sections.
+1. To begin, clone this repository. It includes the Formee sources along with various helpful files.
+2. Copy or rename `./.env.example` to `./.env.local`. `.env.example` contains essential variables and/or placeholders. All environmental variables for local development should be put there, including MongoDB connection string, PrivMX Bridge URL, API Keys, PrivMX Solution & Context IDs. You can find more information about these variables in the following sections.
 
 
-### **Start Bridge Instance**
+### Start Bridge Instance
 
 > To proceed, ensure that Docker is up and running.
 
-To successfully run Formee, you need to have a running PrivMX Bridge instance. PrivMX Bridge is a service that provides end-to-end encryption for your communication. It is a crucial part of Formee's architecture.
+To run Formee successfully, you need to have a running [PrivMX Bridge instance](https://github.com/simplito/privmx-bridge). PrivMX Bridge is a service that provides end-to-end encryption for your communication. It is a crucial part of Formee's architecture.
 
 **Important:** If you already have a PrivMX Bridge Docker instance running on your machine, you **should not** create a new one. Instead, use your existing instance.
 
@@ -67,13 +67,13 @@ JWT_SALT=GENERATED_RANDOM_SECRET
 
 #### Next Public Backend URL
 
-For demo purposes, Formee, runs in localhost (port 3000). `NEXT_PUBLIC_BACKEND_URL` configures the app's default address. In production environment, you can use a fully qualified domain name.
+For demo purposes, Formee runs in localhost (port 3000). `NEXT_PUBLIC_BACKEND_URL` configures the app's default address. In the production environment, you can use a fully qualified domain name.
 
 ```ENV
 NEXT_PUBLIC_BACKEND_URL=http://localhost:3000
 ```
 
-### **Start MongoDB Instance**
+### Start MongoDB Instance
 
 You need a **MongoDB** Instance with replica sets for transactions.
 
@@ -99,14 +99,14 @@ Feel free to adjust these settings if you opt for a custom setup.
 
 ## Running the App
 
-In a new terminal, go to project root folder.
+In a new terminal, go to the project root folder.
 
 ```sh
 npm install
 npm run dev
 ```
 
-Durning the first run, Formee server will create the first invitation token. It's important to **copy and save it somewhere**, it will be used for login.
+During the first run, the Formee server will create the first invitation token. It's important to **copy and save it somewhere**, it will be used for login.
 Go to <http://localhost:3000/sign-up> and create the first Staff user. 
 
 #### IMPORTANT
@@ -126,9 +126,9 @@ mongosh --eval "use Formee; db.InviteTokens.drop()"
 ```
 
 
-### Submiting Responses
+### Submitting Responses
 
-To send response first you need to create Form inside Formee. Next you have to prepare form inside your app/website to collect and send data.
+To send a response, first, you need to create a Form inside Formee. Next, you have to prepare a form inside your app/website to collect and send data.
 You can check examples inside `/examples/` folder that show it should be done.
 
 ### Production Notes
